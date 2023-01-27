@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="samples">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Downloads/javacv-platform-1.5.7-bin.zip!/javacv-platform-1.5.7-bin/samples" />
+    </SOURCES>
+  </library>
+</component>

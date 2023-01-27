@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="main">
+    <CLASSES />
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/../javacpp-presets-platform-1.5.6/opencv/src/main" />
+    </NATIVE>
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ij_ridge_detect-1.4.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../Fiji.app/plugins/ij_ridge_detect-1.4.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

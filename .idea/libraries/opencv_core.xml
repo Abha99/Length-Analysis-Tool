@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="opencv_core">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../javacpp-presets-platform-1.5.6/opencv/src/main/java/org/bytedeco/opencv/opencv_core" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
