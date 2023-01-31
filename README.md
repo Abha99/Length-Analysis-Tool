@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This is an example Maven project implementing an ImageJ 1.x plugin.
 
 For an example Maven project implementing an **ImageJ2 command**, see:
@@ -82,3 +83,7 @@ How to use this project as a starting point
 
 This ensures that the final `.jar` file will also be copied to
 your ImageJ plugins folder everytime you run the Maven build.
+=======
+# Length-Analysis-Plugin
+ImageJ plugin to analyze lengths of paths travelled by cells in images
+>>>>>>> origin/main

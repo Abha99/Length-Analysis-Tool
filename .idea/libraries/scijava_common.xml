@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="scijava.common" type="repository">
+    <properties maven-id="org.scijava:scijava-common:2.53.0" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/scijava/scijava-common/2.53.0/scijava-common-2.53.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/googlecode/gentyref/gentyref/1.1.0/gentyref-1.1.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/bushe/eventbus/1.4/eventbus-1.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -6,6 +6,9 @@
  *     http://creativecommons.org/publicdomain/zero/1.0/
  */
 
+
+// Code without opencv implementation
+
 package com.uga.imagej;
 
 
@@ -47,8 +50,8 @@ public class LengthAnalysisTool_1 implements PlugInFilter {
     Connectivity2D connectivity;
     ArrayList<ArrayList<Integer>> twoDArray;
     ArrayList<Float> junctions_x = new ArrayList<>();
-	ArrayList<Float> junctions_y = new ArrayList<>();
-//	float[] junc_x;
+    ArrayList<Float> junctions_y = new ArrayList<>();
+    //	float[] junc_x;
 //	float[] junc_y;
     public ResultsTable table = ResultsTable.getResultsTable();
 
@@ -322,123 +325,123 @@ public class LengthAnalysisTool_1 implements PlugInFilter {
             }
         }
     }
-	public void find_junctions(ArrayList<ArrayList<Integer>> twoDArray) {
-		int n_count;
-		for(int r=1;r<twoDArray.size()-1;r++) {
-			for(int c=0;c<twoDArray.get(0).size()-1;c++) {
-				n_count=0;
-				if(twoDArray.get(r).get(c) !=0) {
-					int[] neighbours = find_neighbours(twoDArray,r,c);
-					for (int neighbour : neighbours) {
-						if (neighbour != 0)
-							n_count++;
-					}
-					if(n_count>2) {
-						junctions_x.add((float)r);
-						junctions_y.add((float)c);
+    public void find_junctions(ArrayList<ArrayList<Integer>> twoDArray) {
+        int n_count;
+        for(int r=1;r<twoDArray.size()-1;r++) {
+            for(int c=0;c<twoDArray.get(0).size()-1;c++) {
+                n_count=0;
+                if(twoDArray.get(r).get(c) !=0) {
+                    int[] neighbours = find_neighbours(twoDArray,r,c);
+                    for (int neighbour : neighbours) {
+                        if (neighbour != 0)
+                            n_count++;
+                    }
+                    if(n_count>2) {
+                        junctions_x.add((float)r);
+                        junctions_y.add((float)c);
 
-					}
+                    }
 
-				}
+                }
 
-			}
-		}
-	}
-	public void fix_junctions(ArrayList<ArrayList<Integer>> twoDArray) {
-		float[] junc_x = new float[junctions_x.size()];
-		float[] junc_y = new float[junctions_y.size()];
-		int i=0;
-		int j=0;
-		int value = 9999;
-		for (Float f : junctions_x) {
-			junc_x[i++] = (f != null ? f : Float.NaN);
-		}
-		for (Float f : junctions_y) {
-			junc_y[j++] = (f != null ? f : Float.NaN);
-		}
+            }
+        }
+    }
+    public void fix_junctions(ArrayList<ArrayList<Integer>> twoDArray) {
+        float[] junc_x = new float[junctions_x.size()];
+        float[] junc_y = new float[junctions_y.size()];
+        int i=0;
+        int j=0;
+        int value = 9999;
+        for (Float f : junctions_x) {
+            junc_x[i++] = (f != null ? f : Float.NaN);
+        }
+        for (Float f : junctions_y) {
+            junc_y[j++] = (f != null ? f : Float.NaN);
+        }
 
-		for(i=0;i<junc_x.length;i++) {
-			twoDArray.get((int)junc_x[i]).set((int)junc_y[i],value);
-		}
+        for(i=0;i<junc_x.length;i++) {
+            twoDArray.get((int)junc_x[i]).set((int)junc_y[i],value);
+        }
 
-		for(i=0;i<junc_x.length;i++) {
-			int r=(int)junc_x[i];
-			int c=(int)junc_y[i];
-			int start_r=r;
-			int start_c=c;
+        for(i=0;i<junc_x.length;i++) {
+            int r=(int)junc_x[i];
+            int c=(int)junc_y[i];
+            int start_r=r;
+            int start_c=c;
 
-			if(twoDArray.get(r).get(c)!=0){
-				twoDArray.get(r).set(c,value);
-				while(r!=0 && c!=0) {
-					int[] top_x = { r - 1, r - 1, r - 1,r,r};
-					int[] top_y = { c + 1, c, c - 1,c+1,c-1};
+            if(twoDArray.get(r).get(c)!=0){
+                twoDArray.get(r).set(c,value);
+                while(r!=0 && c!=0) {
+                    int[] top_x = { r - 1, r - 1, r - 1,r,r};
+                    int[] top_y = { c + 1, c, c - 1,c+1,c-1};
 
-					int count_top = 0;
-					int count_bot=0;
-					int count_l=0;
-					int count_r=0;
-					int l;
-					for (int n = 0; n < top_x.length; n++) {
-						if (twoDArray.get(top_x[n]).get(top_y[n]) != value && twoDArray.get(top_x[n]).get(top_y[n]) != 0) {
-							count_top++;
-							twoDArray.get(top_x[n]).set(top_y[n], value);
-							r = top_x[n];
-							c = top_y[n];
-						}
-					}
-					if(count_top==0) {
-						r=max(r,start_r);
-						c=max(c,start_c);
-						int[] bot_x = {r + 1, r + 1, r + 1,r,r};
-						int[] bot_y = {c+1,c,c-1,c+1,c-1};
-						for (int n = 0; n < bot_x.length; n++) {
-							if (twoDArray.get(bot_x[n]).get(bot_y[n]) != value && twoDArray.get(bot_x[n]).get(bot_y[n]) != 0) {
-								count_bot++;
-								twoDArray.get(bot_x[n]).set(bot_y[n], value);
-								r = bot_x[n];
-								c = bot_y[n];
-							}
+                    int count_top = 0;
+                    int count_bot=0;
+                    int count_l=0;
+                    int count_r=0;
+                    int l;
+                    for (int n = 0; n < top_x.length; n++) {
+                        if (twoDArray.get(top_x[n]).get(top_y[n]) != value && twoDArray.get(top_x[n]).get(top_y[n]) != 0) {
+                            count_top++;
+                            twoDArray.get(top_x[n]).set(top_y[n], value);
+                            r = top_x[n];
+                            c = top_y[n];
+                        }
+                    }
+                    if(count_top==0) {
+                        r=max(r,start_r);
+                        c=max(c,start_c);
+                        int[] bot_x = {r + 1, r + 1, r + 1,r,r};
+                        int[] bot_y = {c+1,c,c-1,c+1,c-1};
+                        for (int n = 0; n < bot_x.length; n++) {
+                            if (twoDArray.get(bot_x[n]).get(bot_y[n]) != value && twoDArray.get(bot_x[n]).get(bot_y[n]) != 0) {
+                                count_bot++;
+                                twoDArray.get(bot_x[n]).set(bot_y[n], value);
+                                r = bot_x[n];
+                                c = bot_y[n];
+                            }
 
-						}
-						if(count_bot==0)
-						{
-							r=max(r,start_r);
-							c=max(c,start_c);
-							int[] l_x = {r-1,r-1,r-1};
-							int[] l_y = {c-1,c,c+1};
-							for(l=0;l<l_x.length;l++) {
-								if (twoDArray.get(l_x[l]).get(l_y[l]) != value && twoDArray.get(l_x[l]).get(l_y[l]) != 0) {
-									count_l++;
-									twoDArray.get(l_x[l]).set(l_y[l], value);
-									r = l_x[l];
-									c = l_y[l];
-								}
-							}
-							if(count_l==0) {
-								r=max(r,start_r);
-								c=max(c,start_c);
-								int[] r_x = {r+1,r+1,r+1};
-								int[] r_y = {c-1,c,c+1};
-								for(l=0;l<r_x.length;l++) {
-									if (twoDArray.get(r_x[l]).get(r_y[l]) != value && twoDArray.get(r_x[l]).get(r_y[l]) != 0) {
-										count_r++;
-										twoDArray.get(r_x[l]).set(r_y[l], value);
-										r = r_x[l];
-										c = r_y[l];
-									}
-								}
-								if(count_r==0)
-									break;
-							}
+                        }
+                        if(count_bot==0)
+                        {
+                            r=max(r,start_r);
+                            c=max(c,start_c);
+                            int[] l_x = {r-1,r-1,r-1};
+                            int[] l_y = {c-1,c,c+1};
+                            for(l=0;l<l_x.length;l++) {
+                                if (twoDArray.get(l_x[l]).get(l_y[l]) != value && twoDArray.get(l_x[l]).get(l_y[l]) != 0) {
+                                    count_l++;
+                                    twoDArray.get(l_x[l]).set(l_y[l], value);
+                                    r = l_x[l];
+                                    c = l_y[l];
+                                }
+                            }
+                            if(count_l==0) {
+                                r=max(r,start_r);
+                                c=max(c,start_c);
+                                int[] r_x = {r+1,r+1,r+1};
+                                int[] r_y = {c-1,c,c+1};
+                                for(l=0;l<r_x.length;l++) {
+                                    if (twoDArray.get(r_x[l]).get(r_y[l]) != value && twoDArray.get(r_x[l]).get(r_y[l]) != 0) {
+                                        count_r++;
+                                        twoDArray.get(r_x[l]).set(r_y[l], value);
+                                        r = r_x[l];
+                                        c = r_y[l];
+                                    }
+                                }
+                                if(count_r==0)
+                                    break;
+                            }
 
-						}
+                        }
 
-					}
-				}
-			}
-		}
+                    }
+                }
+            }
+        }
 
-	}
+    }
 
     /**
      * This method used the connected component labelling algorithm to find the paths
@@ -527,7 +530,7 @@ public class LengthAnalysisTool_1 implements PlugInFilter {
             final_arr.add(list);
         }
 
-		fix_junctions(final_arr);
+        fix_junctions(final_arr);
         calculate_area(final_arr);
 
     }
@@ -582,7 +585,7 @@ public class LengthAnalysisTool_1 implements PlugInFilter {
             }
         }
 
-		find_junctions(twoDArray);
+        find_junctions(twoDArray);
         find_lines(twoDArray);
 
         displayContours(resultPlus);

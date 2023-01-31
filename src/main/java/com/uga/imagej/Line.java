@@ -13,7 +13,6 @@ public class Line {
     static int idCounter = 0;
     private int id;
     private int frame;
-
     public Line() {
         this.assignID();
     }
