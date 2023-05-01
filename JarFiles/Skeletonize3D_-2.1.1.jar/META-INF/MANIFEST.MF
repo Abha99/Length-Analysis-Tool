@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Implementation-Title: Skeletonize3D
+Package: sc.fiji.skeletonize3D
+Implementation-Version: 2.1.1
+Archiver-Version: Plexus Archiver
+Built-By: curtis
+Specification-Vendor: Fiji
+Specification-Title: Skeletonize3D
+Implementation-Vendor-Id: sc.fiji
+Class-Path: ij-1.51h.jar
+Implementation-Date: 2017-04-29T23:07:04-0500
+Implementation-Vendor: Fiji
+Premain-Class: 
+Implementation-Build: dcd8f3923408d5df6093b16e569958b93b99a687
+Created-By: Apache Maven 3.0.4
+Build-Jdk: 1.8.0_111
+Specification-Version: 2.1.1
+Implementation-URL: https://imagej.net/Skeletonize3D
+

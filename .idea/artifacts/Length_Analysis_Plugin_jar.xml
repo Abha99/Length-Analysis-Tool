@@ -7,8 +7,8 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/../Fiji.app/plugins/MorphoLibJ_-1.5.1-FillLabelHolesV2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/imagej/ij/1.53f/ij-1.53f.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../Fiji.app/plugins/Skeletonize3D_-2.1.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/MorphoLibJ_-1.5.1-FillLabelHolesV2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/Auto_Threshold-1.17.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/JarFiles/MorphoLibJ_-1.5.1-FillLabelHolesV2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/JarFiles/Auto_Threshold-1.17.2.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
