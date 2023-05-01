@@ -24,7 +24,7 @@ To use the Length Analysis plugin, follow these steps:
 
 To use the Length Analysis plugin, follow these steps:
 
-1. Open an image of cells in suspension in Fiji
+1. Open an image of cells in suspension in Fiji.
 2. Click on the Length Analysis plugin in the Plugins menu
 3. The plugin will calculate the distance, length, and curvature of the paths traversed by the selected cells.
 4. The results can be exported as a CSV file for further analysis.
