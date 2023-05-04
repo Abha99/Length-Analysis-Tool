@@ -1,11 +1,15 @@
 package com.uga.imagej;
 
 
+
+
 import ij.ImagePlus;
 import ij.gui.*;
 import java.awt.*;
 import ij.process.FloatPolygon;
 import java.util.ArrayList;
+
+
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import ij.gui.Overlay;
@@ -15,9 +19,8 @@ import ij.gui.TextRoi;
 /**
  * Identify and draw the paths traversed by the cells in an image.
  */
-public class Contours extends BSpline {
+public class Contours  {
     private int label = 1,temp_r = 0,prev_r = 0,prev_c = 0,curr_r = 0,curr_c = 0,n_count,n = 0;
-    private final ArrayList<Integer> labels = new ArrayList<>();
     public ArrayList<FloatPolygon> paths;
 
     /**
@@ -27,8 +30,21 @@ public class Contours extends BSpline {
      * @param twoDArray Two-dimensional array of input image.
      */
     public ArrayList<ArrayList<Integer>> findLines(ArrayList<ArrayList<Integer>> twoDArray) {
-        int r,c;
-        int[][] temp_arr = new int[twoDArray.size()][twoDArray.get(0).size()];
+        int height = twoDArray.size();
+        int width = twoDArray.get(0).size();
+        int[][] temp_arr = new int[height][width];
+        for (int i = 0; i < temp_arr.length - 1; i++) {
+            for (int j = 0; j < temp_arr[0].length; j++) {
+                temp_arr[i][j] = 0;
+            }
+        }
+        ArrayList<Integer> labels = new ArrayList<>();
+        int label = 1;
+        int temp_r = 0;
+        int prev_r = 0;
+        int prev_c = 0;
+        int c;
+        int r;
         for (r = 1; r < twoDArray.size() - 1; r++) {
             for (c = 1; c < twoDArray.get(0).size() - 1; c++) {
                 if (twoDArray.get(r).get(c) == 255 && (temp_arr[r][c] == label || temp_arr[r][c] == 0)) {
@@ -36,11 +52,19 @@ public class Contours extends BSpline {
                     if (!labels.contains(label)) {
                         labels.add(label);
                         temp_r = r;
+                        prev_r = r;
+                        prev_c = c;
                     }
-                    int[] neighbours_x = {r - 1, r - 1, r - 1, r, r, r + 1, r + 1, r + 1}, neighbours_y = {c + 1, c, c - 1, c + 1, c - 1, c + 1, c, c - 1};
-                    int n_count = 0, curr_r = 0, curr_c = 0;
-                    for (int n1 = 0; n1 < neighbours_x.length; n1++)
-                        if (twoDArray.get(neighbours_x[n1]).get(neighbours_y[n1]) != 0) n_count++;
+                    int[] neighbours_x = {r - 1, r - 1, r - 1, r, r, r + 1, r + 1, r + 1};
+                    int[] neighbours_y = {c + 1, c, c - 1, c + 1, c - 1, c + 1, c, c - 1};
+                    int n_count = 0;
+                    int curr_r = 0;
+                    int curr_c = 0;
+                    for (int n1 = 0; n1 < neighbours_x.length; n1++) {
+                        if (twoDArray.get(neighbours_x[n1]).get(neighbours_y[n1]) != 0)
+                            n_count++;
+                    }
+
                     for (int n = 0; n < neighbours_x.length; n++) {
                         if (twoDArray.get(neighbours_x[n]).get(neighbours_y[n]) != 0) {
                             curr_r = neighbours_x[n];
@@ -55,10 +79,13 @@ public class Contours extends BSpline {
                                 c = neighbours_y[n] - 1;
                                 break;
                             }
+
                         }
+
                     }
-                    if (n_count > 2) temp_arr[r][c] = temp_arr[r - 1][c];
-                    else if (n_count == 1 && (curr_r == prev_r && curr_c == prev_c)) {
+                    if (n_count > 2) {
+                        temp_arr[r][c] = temp_arr[r - 1][c];
+                    } else if (n_count == 1 && (curr_r == prev_r && curr_c == prev_c)) {
                         label++;
                         r = temp_r;
                         break;
@@ -66,31 +93,25 @@ public class Contours extends BSpline {
                         label++;
                         r = temp_r - 1;
                         break;
+
                     }
                 }
+
             }
         }
+
+
         ArrayList<ArrayList<Integer>> final_arr = new ArrayList<>();
         for (int[] ints : temp_arr) {
             ArrayList<Integer> list = new ArrayList<>();
-            for (int i : ints) list.add(i);
+            for (int i : ints) {
+                list.add(i);
+            }
             final_arr.add(list);
         }
         return final_arr;
     }
 
-
-    /**
-     * Filters cell paths based on min/max lengths.
-     *
-     * @param num_points number of pixels
-     * @param polyLine Floatpolygon of path traversed by cell.
-     */
-    public void filterLines(int num_points,int min,int max, FloatPolygon polyLine) {
-            if (num_points > min && num_points < max){
-                paths.add(polyLine);
-            }
-    }
     /**
      * Removes the overlapping paths in the image.
      *
@@ -102,12 +123,11 @@ public class Contours extends BSpline {
         ArrayList<Object> overlaps = new ArrayList<>();
         int n, i, j ;
         paths = new ArrayList<>();
-        ConnectedNeighbours cn  = new ConnectedNeighbours();
         for (i = 0; i < twoDArray.size() - 1; i++) {
             for (j = 0; j < twoDArray.get(0).size() - 1; j++) {
                 int[] neighbours = new int[0];
                 if (twoDArray.get(i).get(j) != 0 && twoDArray.get(i).get(j) != 9999)
-                    neighbours = cn.findNeighbours(twoDArray, i, j);
+                    neighbours = findNeighbours(twoDArray, i, j);
                 for (n = 0; n < neighbours.length; n++) {
                     if (neighbours[n] == 9999 && !overlaps.contains(twoDArray.get(i).get(j))) {
                         overlaps.add(twoDArray.get(i).get(j));
@@ -118,8 +138,59 @@ public class Contours extends BSpline {
                     unique_labels.add(twoDArray.get(i).get(j));
             }
         }
+//        System.out.println(overlaps);
         unique_labels.removeAll(overlaps);
         return unique_labels;
+    }
+
+    /**
+     * Returns the 8 connected neighbours of each pixel.
+     *
+     * @param twoDArray Two-dimensional array of input image.
+     * @param r         x coordinate of pixel.
+     * @param c         y coordinate of pixel.
+     * @return Array containing pixel intensities of 8 directly connected neighbours of each pixel
+     */
+    public int[] findNeighbours(ArrayList<ArrayList<Integer>> twoDArray, int r, int c) {
+
+        return new int[]{twoDArray.get(r + 1).get(max(c - 1, 0)),
+                twoDArray.get(r + 1).get(c),
+                twoDArray.get(r + 1).get(c + 1),
+                twoDArray.get(r).get(max(c - 1, 0)),
+                twoDArray.get(r).get(c + 1),
+                twoDArray.get(max(r - 1, 0)).get(max(c - 1, 0)),
+                twoDArray.get(max(r - 1, 0)).get(c),
+                twoDArray.get(max(r - 1, 0)).get(c + 1)};
+    }
+
+    /**
+     * Returns number of 8-connected neighbours having same label as input label.
+     *
+     * @param r x coordinate of pixel.
+     * @param c y coordinate of pixel.
+     * @param label label of current pixel.
+     * @param twoDArray Two-dimensional array of input image.
+     * @return Number of pixels with same label as input.
+     */
+    public int getNeighbourCount(int r, int c, int label, ArrayList<ArrayList<Integer>> twoDArray) {
+        int[] neighbours_x = {r - 1, r - 1, r - 1, r, r, r + 1, r + 1, r + 1};
+        int[] neighbours_y = {c + 1, c, c - 1, c - 1, c + 1, c + 1, c, c - 1};
+        for (n = 0; n < neighbours_x.length; n++) {
+            if (twoDArray.get(neighbours_x[n]).get(neighbours_y[n]) == label)
+                n_count++;
+        }
+        return n_count;
+    }
+
+    /**
+     * Filters cell paths based on min/max lengths.
+     *
+     * @param num_points number of pixels
+     * @param polyLine Floatpolygon of path traversed by cell.
+     */
+    public void filterLines(int num_points, FloatPolygon polyLine) {
+            if (num_points >= 15 && num_points <= 300)
+                paths.add(polyLine);
     }
 
     /**
@@ -127,8 +198,7 @@ public class Contours extends BSpline {
      *
      * @param twoDArray Two-dimensional array of input image.
      */
-    public void calculateLength(ArrayList<ArrayList<Integer>> twoDArray,int min,int max) {
-
+    public void calculateLength(ArrayList<ArrayList<Integer>> twoDArray) {
         ArrayList<Object> unique_labels = removeOverlaps(twoDArray);
         for (Object unique_label : unique_labels) {
             int num_points = 0;
@@ -140,8 +210,7 @@ public class Contours extends BSpline {
                     if (twoDArray.get(r).get(c) == (int) unique_label) {
                         if (num_points == 0) {
                             prev_r = r;prev_c = c;
-                            ConnectedNeighbours cn = new ConnectedNeighbours();
-                            n_count = cn.getNeighbourCount(r, c, (int) unique_label, twoDArray);
+                            n_count = getNeighbourCount(r, c, (int) unique_label, twoDArray);
                             if (n_count >= 2) break;
                         }
                         num_points++;
@@ -160,10 +229,56 @@ public class Contours extends BSpline {
                         else if (n_count == 0) break;
                     }
                 }
-            filterLines(num_points,min,max,polyLine);
+            filterLines(num_points,polyLine);
         }
     }
 
+    /**
+     * Adjust the ends of paths traversed by cells.
+     *
+     * @param path path
+     * @param twoDArray Two-dimensional array of input image.
+     * @return Floatpolygon with adjusted end points.
+     */
+    public FloatPolygon adjustEndPoints(FloatPolygon path, ArrayList<ArrayList<Integer>> twoDArray) {
+        float px, py;
+        int num_points = path.npoints;
+        FloatPolygon contours = new FloatPolygon();
+        float[] row = path.xpoints,col = path.ypoints;
+        int r = (int) row[0],c = (int) col[0];
+        int[] neighbours_x = {r, r, r - 1, r - 1},neighbours_y = {c - 1, c, c - 1, c};
+        for (int s = 0; s < neighbours_x.length; s++)
+            if (twoDArray.get(neighbours_x[s]).get(neighbours_y[s]) == 255) contours.addPoint(neighbours_x[s], neighbours_y[s]);
+        for (int j = 0; j < num_points; j += 1) {
+            px = row[j];
+            py = col[j];
+            int num = 1;
+            ArrayList<Object> sum = new ArrayList<>();
+            for (int i = j; i < row.length; i++) {
+                if (px == row[i]) {
+                    num++;
+                    sum.add(col[i]);
+                } else break;
+            }
+            if (num > 1) {
+                float temp;
+                if (j != 0) {
+                    temp = 0;
+                    for (Object o : sum) if (temp < (float) o) temp = (float) o;
+                } else {
+                    temp = 999;
+                    for (Object o : sum) if (temp > (float) o) temp = (float) o;
+                }
+                py = temp;
+                col[j] = py;
+                for (int n = 0; n < num; n++) col[j + n < num_points ? j + n : j] = py;
+                j += (num - 1);
+            }
+            contours.addPoint((px), (py));
+        }
+        contours.addPoint(row[num_points - 1], col[num_points - 1]);
+        return contours;
+    }
 
     /**
      * Calculates the straight length between the 2 end points of the path.
@@ -183,18 +298,17 @@ public class Contours extends BSpline {
      *
      * @param imp Input image
      */
-    public void displayContours(ImagePlus imp, ArrayList<ArrayList<Integer>> twoDArray,float magnificationFactor,int expTime) {
-        double velocity;
+    public void displayContours(ImagePlus imp, ArrayList<ArrayList<Integer>> twoDArray) {
         imp.setOverlay(null);
         Overlay ovpoly = new Overlay();
         int id = 1;
         for (FloatPolygon path : paths) {
-            ContourCorrection c = new ContourCorrection();
-            FloatPolygon contours = c.adjustEndPoints(path, twoDArray);
+            BSpline sp = new BSpline();
+            FloatPolygon contours = adjustEndPoints(path, twoDArray);
             double len = calculateLen(contours.xpoints[0], contours.xpoints[contours.npoints - 1], contours.ypoints[0], contours.ypoints[contours.npoints - 1]);
             double area = contours.getLength(true);
-            bsplineCurvature(contours);
-            double curvature = computeAvgCurvature();
+            sp.bsplineCurvature(contours);
+            double curvature = sp.computeAvgCurvature();
             PolygonRoi polyRoiMitte = new PolygonRoi(contours, Roi.POLYLINE);
             polyRoiMitte.setStrokeColor(Color.red);
             ovpoly.add(polyRoiMitte);
@@ -203,9 +317,8 @@ public class Contours extends BSpline {
             tr.setIgnoreClipRect(true);
             tr.setStrokeColor(Color.orange);
             ovpoly.add(tr);
-            velocity = (area/expTime)*magnificationFactor;
-            com.uga.imagej.ResultsTable rt = new com.uga.imagej.ResultsTable();
-            rt.createResultsTable(id, len, area,velocity, curvature);
+            LengthAnalysisTool_1 l1 = new LengthAnalysisTool_1();
+            l1.createResultsTable(id, len, area, curvature);
             id++;
         }
         if (ovpoly.size() > 0)
