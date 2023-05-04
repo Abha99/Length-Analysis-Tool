@@ -1,8 +1,5 @@
 package com.uga.imagej;
 
-
-
-
 import ij.ImagePlus;
 import ij.gui.*;
 import java.awt.*;
