@@ -15,7 +15,7 @@ The plugin works by taking an image of cells in suspension and analyzing the pat
 To use the Length Analysis plugin, follow these steps:
 
 1. Install Fiji (ImageJ) from the [Fiji website](https://fiji.sc/)
-2. Download the Length Analysis plugin [here](https://github.com/Abha99/Length-Analysis-Plugin/Jars)
+2. Download the Length Analysis plugin [here](https://github.com/Abha99/Length-Analysis-Tool/tree/main/Jars)
 3. Download the dependencies ([Autothreshold](https://maven.scijava.org/service/local/artifact/maven/redirect?r=releases&g=sc.fiji&a=Auto_Threshold&v=RELEASE&e=jar), [MorpholibJ](https://github.com/ijpb/MorphoLibJ/releases) and [Skeletonize3D](https://imagej.net/plugins/skeletonize3d) Plugins)
 3. Copy the `.jar` files to the `plugins` folder in your Fiji installation directory.
 4. Restart Fiji
